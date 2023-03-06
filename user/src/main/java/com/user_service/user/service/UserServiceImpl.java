@@ -1,5 +1,6 @@
 package com.user_service.user.service;
- /** this is the service class
+ import java.util.ArrayList;
+/** this is the service class
  * this is use to implement user service interface
  * in this we write all the building logic of our application
  */
@@ -9,9 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import com.netflix.discovery.converters.Auto;
 import com.user_service.user.entity.User;
 import com.user_service.user.entity.UserEnroll;
+import com.user_service.user.objects.CourseDto;
+import com.user_service.user.objects.UserDto;
 import com.user_service.user.repository.UserEnrollRepository;
 import com.user_service.user.repository.UserRepository;
 
@@ -22,7 +27,13 @@ public class UserServiceImpl implements UserService {
 	UserRepository userRepository;
 	
 	@Autowired
+	CourseService courseService;
+	
+	@Autowired
 	UserEnrollRepository userEnrollRepository;
+	
+	@Autowired
+	RestTemplate restTemplate;
 	
 	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -86,18 +97,18 @@ public class UserServiceImpl implements UserService {
 	        return userRepository.save(user);
 	}
 
-	@Override
-	public UserEnroll getUserByCourseId(Long courseId) {
-		logger.debug("Get user: {}", courseId);
-
-	try {
-		return userEnrollRepository.findUserByCourseId(courseId);
-	}
-	catch (Exception e) {
-		// TODO: handle exception
-		throw new RuntimeException("get user by courseId" + courseId, e);
-	}
-	}
+//	@Override
+//	public UserEnroll getUserByCourseId(Long courseId) {
+//		logger.debug("Get user: {}", courseId);
+//
+//	try {
+//		return userEnrollRepository.findUserByCourseId(courseId);
+//	}
+//	catch (Exception e) {
+//		// TODO: handle exception
+//		throw new RuntimeException("get user by courseId" + courseId, e);
+//	}
+//	}
 
 	@Override
 	public List<UserEnroll> getAllUserEnroll() {
@@ -110,4 +121,19 @@ public class UserServiceImpl implements UserService {
 		
 		return userEnrollRepository.save(userEnroll);
 	}
+	
+	@Override
+	public List<UserDto> getUserByCourseId(Long courseId) {
+		 List<UserEnroll> userEnrolls = userEnrollRepository.findByCourseId(courseId);
+	        List<UserDto> userDtos = new ArrayList<>();
+	        for (UserEnroll userEnroll : userEnrolls) {
+	            User user = userRepository.findById(userEnroll.getUser().getUserId()).orElse(null);
+	            if (user != null) {
+	            	CourseDto courseDto = courseService.getCourseById(userEnroll.getCourseId());
+	                UserDto userDto = new UserDto(user.getUserId(), user.getName(), user.getEmail(), user.getAddress(), user.getPhoneNo(), user.getAge(), courseDto);
+	                userDtos.add(userDto);
+	            }
+	        }
+	        return userDtos;
+	    }
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.user_service.user.entity.User;
 import com.user_service.user.entity.UserEnroll;
+import com.user_service.user.objects.UserDto;
 
 @Component
 public interface UserService {
@@ -19,13 +20,21 @@ public interface UserService {
 	User updateUser(User user);
 
 //	List<User> getCourseByUserId(Long userId);
-	UserEnroll getUserByCourseId(Long courseId);
+//	UserEnroll getUserByCourseId(Long courseId);
 
 	List<UserEnroll> getAllUserEnroll();
 
 	UserEnroll addUserEnroll(UserEnroll userEnroll);
 
+//	CourseDto getCourseById(Long courseId);
+
 //	List<User> getUserByCourse(Long courseId);
+
+
+//	public  List<UserDto> getUsersByCourseId(Long courseId);
+
+	List<UserDto> getUserByCourseId(Long courseId); 
+
 	
 	
 

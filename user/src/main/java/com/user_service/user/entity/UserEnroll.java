@@ -14,16 +14,17 @@ public class UserEnroll {
 	private String status;
 	private String subscription;
 	private Long courseId;
-//	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY)
 //	  @JoinColumn(name = "user_id")
-//	private User user;
+	private User user;
 	
-	public UserEnroll(Long enrollId, String duration, String status, String subscription, Long courseId) {
+	public UserEnroll(Long enrollId, String duration, String status, String subscription, Long courseId, User user) {
 		this.enrollId = enrollId;
 		this.duration = duration;
 		this.status = status;
 		this.subscription = subscription;
 		this.courseId = courseId;
+		this.user = user;
 	}
 
 	public Long getEnrollId() {
@@ -57,21 +58,24 @@ public class UserEnroll {
 	public void setCourseId(Long courseId) {
 		this.courseId = courseId;
 	}
-//	public User getUser() {
-//		return user;
-//	}
-//	public void setUser(User user) {
-//		this.user = user;
-//	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
 	
 	public UserEnroll() {
 	
 	}
+
 	@Override
 	public String toString() {
 		return "UserEnroll [enrollId=" + enrollId + ", duration=" + duration + ", status=" + status + ", subscription="
-				+ subscription + ", courseId=" + courseId + "]";
+				+ subscription + ", courseId=" + courseId + ", user=" + user + "]";
 	}
+	
+	
 	
 	
 	

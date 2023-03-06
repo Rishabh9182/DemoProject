@@ -16,6 +16,9 @@ import org.springframework.web.client.RestTemplate;
 
 import com.user_service.user.entity.User;
 import com.user_service.user.entity.UserEnroll;
+import com.user_service.user.objects.CourseDto;
+import com.user_service.user.objects.UserDto;
+import com.user_service.user.service.CourseService;
 import com.user_service.user.service.UserService;
 
 @RestController
@@ -24,6 +27,9 @@ public class UserController {
 	
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	CourseService courseService;
 	
 	@Autowired
 	RestTemplate restTemplate;
@@ -58,13 +64,21 @@ public class UserController {
 		return userService.updateUser(user);
 	}
 	
+//	@GetMapping("/course/{courseId}")
+//	public UserEnroll getUserByCourseId(@PathVariable Long courseId){
+//		String url = "http://localhost:8081/course/" + courseId;
+//	    ResponseEntity<UserEnroll> response = restTemplate.getForEntity(url, UserEnroll.class);
+//	    return response.getBody();
+//	}
 	@GetMapping("/course/{courseId}")
-	public UserEnroll getUserByCourseId(@PathVariable Long courseId){
-		String url = "http://localhost:8081/course/" + courseId;
-	    ResponseEntity<UserEnroll> response = restTemplate.getForEntity(url, UserEnroll.class);
-	    return response.getBody();
+	CourseDto getCourseById(Long courseId) {
+    return courseService.getCourseById(courseId);
 	}
-		
+	
+	@GetMapping("/{courseId}")
+   public  List<UserDto> getUsersByCourseId(@PathVariable Long courseId) {
+	return  userService.getUserByCourseId(courseId);	
+	}
 	
 	
 	}
