@@ -20,19 +20,16 @@ public class CourseServiceImpl implements CourseService {
 	
 	@Override
 	public List<Course> getAllCourses() {
-	
 		return courseRepository.findAll();
 	}
 
 	@Override
 	public Course getCourse(Long courseId) {
-		
 		return courseRepository.findById(courseId).get();
 	}
 
 	@Override
 	public Course addCourse(Course course) {
-		
 		return courseRepository.save(course);
 	}
 
